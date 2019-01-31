@@ -88,6 +88,9 @@ typedef signed   __int64  s64;
 
 #endif /* __MSC_VER */
 
+typedef float   f32;
+typedef double  f64;
+
 #endif /* TOTALPHASE_DATA_TYPES */
 
 
