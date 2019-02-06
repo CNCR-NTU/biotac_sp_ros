@@ -32,12 +32,14 @@
 //=========================================================================
 // INCLUDES
 //=========================================================================
+
 #ifdef _WIN32
 #define _CRT_SECURE_NO_DEPRECATE
 #endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #if defined (__linux__) || defined (__APPLE__)
 #include <sys/time.h>
@@ -74,8 +76,8 @@ static const char *command_name[] = \
 		{ "PAC", "PDC", "TAC", "TDC", "   ", "   ", "   ", "   ", "   ", "   ", \
 		  "   ", "   ", "   ", "   ", "   ", "HAL", "REV", "E01", "E02", "E03", \
 		  "E04", "E05", "E06", "E07", "E08", "E09", "E10", "E11", "E12", "E13", \
-		  "E14", "E15", "E16", "E17", "E18", "E19", "   ", "   ", "   ", "   ", \
-		  "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", \
+		  "E14", "E15", "E16", "E17", "E18", "E19", "E20", "E21", "E22", "E23", \
+		  "E24", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", \
 		  "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", \
 		  "   ", "   ", "   ", "   "};
 
@@ -170,13 +172,12 @@ Cheetah bt_cheetah_initialize(const bt_info *biotac)
 		ch_spi_bitrate(ch_handle, biotac->spi_clock_speed);
 		printf("Bitrate set to %d kHz\n", biotac->spi_clock_speed);
 		fflush(stdout);
-	
+
 		/* PLACEHOLDER FOR FUTURE BIOTAC PROPERTY MEASUREMENTS */
 
 		ch_spi_queue_clear(ch_handle);
 		ch_spi_queue_oe(ch_handle, 1);
     }
-
 	return ch_handle;
 }
 
@@ -246,6 +247,7 @@ BioTac bt_cheetah_get_properties(Cheetah ch_handle, int bt_select, bt_property *
 			ch_spi_queue_ss(ch_handle, CS_NONE_BT);
 			ch_spi_batch_shift(ch_handle, 0, tmp);
 			break;
+
 		case BT_FIRMWARE_VERSION_READ_COMMAND:
 			do {
 					ch_spi_queue_clear(ch_handle);
@@ -399,7 +401,7 @@ BioTac bt_cheetah_configure_batch(Cheetah ch_handle, bt_info *biotac, int num_sa
 					bt_select_cmd = CS_BT5;
 					break;
 #endif
-				}
+                }
 				ch_spi_queue_ss(ch_handle, (u08)bt_select_cmd);
 				ch_spi_queue_byte(ch_handle, 2, 0x00);
 			}
@@ -429,10 +431,8 @@ BioTac bt_cheetah_configure_batch(Cheetah ch_handle, bt_info *biotac, int num_sa
 	{
 		ch_spi_async_submit(ch_handle);
 	}
-
 	return bt_err_code;
 }
-
 
 //=========================================================================
 // CONFIGURATION OF SAVE BUFFER
@@ -444,7 +444,6 @@ bt_data* bt_configure_save_buffer(int number_of_samples)
 	data = malloc(number_of_samples * sizeof *data);
 	return data;
 }
-
 
 //=========================================================================
 // COLLECT BATCH
@@ -515,12 +514,11 @@ void bt_cheetah_collect_batch(Cheetah ch_handle, const bt_info *biotac, bt_data 
 			data[count].time = 0;
 		}
 
-		data[count].channel_id = (biotac->frame.frame_structure[i%(biotac->frame.frame_size)] & 0x7E) >> 1;
+        data[count].channel_id = (biotac->frame.frame_structure[i%(biotac->frame.frame_size)] & 0x7E) >> 1;
 
 		for(j = 0; j < MAX_BIOTACS_PER_CHEETAH; j++)
 		{
 			data[count].d[j].word = (bt_raw_data[i*byte_shift + j*2 + 2] >> 1) * 32 + (bt_raw_data[i*byte_shift + j*2 + 3] >> 3);
-
 			if((parity_values[bt_raw_data[i*byte_shift + j*2 + 2] >> 1] == bt_raw_data[i*byte_shift + j*2 + 2]) && \
 					(parity_values[bt_raw_data[i*byte_shift + j*2 + 3] >> 1] == bt_raw_data[i*byte_shift + j*2 + 3]))
 			{
@@ -545,15 +543,113 @@ void bt_cheetah_collect_batch(Cheetah ch_handle, const bt_info *biotac, bt_data 
 			printf("%6.0f, %6.0f,  %s ", data[count].batch_index, data[count].frame_index, command_name[data[count].channel_id]);
 			for(j = 0; j < MAX_BIOTACS_PER_CHEETAH; j++)
 			{
-				printf("%6d, %d; ", data[count].d[j].word, data[count].bt_parity[j]);
+				printf("%6d, ", data[count].d[j].word);//, data[count].bt_parity[j]);
 			}
 			printf("\n");
 		}
-		count++;
+        count++;
 	}
 	free(bt_raw_data);
 }
 
+//=========================================================================
+// NTU configuration
+//=========================================================================
+void bt_cheetah_collect_batch_ntu(Cheetah ch_handle, const bt_info *biotac, bt_data *data, int results[4][162])
+{
+	int i, j;
+ 	int byte_shift = 2 + (MAX_BIOTACS_PER_CHEETAH * 2);			// 2 bytes of command + 2 bytes per BioTac data
+	int spi_data_len;
+	int number_of_samples_in_batch;
+	u08 *bt_raw_data;
+
+    spi_data_len = ch_spi_batch_length(ch_handle);
+	bt_raw_data = malloc(spi_data_len * sizeof *bt_raw_data);
+	ch_spi_async_collect(ch_handle, spi_data_len, bt_raw_data);
+	ch_spi_async_submit(ch_handle);
+
+	number_of_samples_in_batch = spi_data_len/byte_shift;
+	printf("Number of samples: %d\n",number_of_samples_in_batch);
+
+	/**** Time stamps from a computer (by default, it's disabled) ****/
+#ifdef MACHINE_TIMER
+#if defined (__linux__) || defined (__APPLE__)
+	gettimeofday(&tv, NULL);
+	curtime_sec = tv.tv_sec;
+	curtime_usec = tv.tv_usec;
+
+	time_of_frame_end = curtime_sec + (double)curtime_usec/1000000;
+	time_step = (time_of_frame_end - time_of_frame_start) / number_of_samples_in_batch;
+	time_of_frame_start = time_of_frame_end;
+#elif defined (_WIN32)
+	QueryPerformanceCounter(&time_of_frame_end);
+	time_step = ((time_of_frame_end.QuadPart - time_of_frame_start.QuadPart) / (double)frequency.QuadPart) / number_of_samples_in_batch;
+	time_of_frame_start = time_of_frame_end;
+#endif
+#endif /* MACHINE_TIMER */
+    int ct=0;
+	for(i = 0; i < number_of_samples_in_batch; i++)
+	{
+		if(count != 0)
+		{
+			if(i==0)
+			{
+				data[count].batch_index = data[count-1].batch_index + 1;
+			}
+			else
+			{
+				data[count].batch_index = data[count-1].batch_index;
+			}
+			if((i%(biotac->frame.frame_size)) == 0)
+			{
+				data[count].frame_index = data[count-1].frame_index + 1;
+			}
+			else
+			{
+				data[count].frame_index = data[count-1].frame_index;
+			}
+			/**** Time stamps from a computer (by default, it's disabled) ****/
+#ifdef DEFAULT_TIMER
+			data[count].time = 0.0;
+#elif defined MACHINE_TIMER
+			data[count].time = data[count-1].time + time_step;
+#endif
+		}
+		else
+		{
+            data[count].batch_index = 1;
+			data[count].frame_index = 1;
+			data[count].time = 0;
+		}
+
+        data[count].channel_id = (biotac->frame.frame_structure[i%(biotac->frame.frame_size)] & 0x7E) >> 1;
+
+		for(j = 0; j < MAX_BIOTACS_PER_CHEETAH; j++)
+		{
+			data[count].d[j].word = (bt_raw_data[i*byte_shift + j*2 + 2] >> 1) * 32 + (bt_raw_data[i*byte_shift + j*2 + 3] >> 3);
+			if((parity_values[bt_raw_data[i*byte_shift + j*2 + 2] >> 1] == bt_raw_data[i*byte_shift + j*2 + 2]) && \
+					(parity_values[bt_raw_data[i*byte_shift + j*2 + 3] >> 1] == bt_raw_data[i*byte_shift + j*2 + 3]))
+			{
+				data[count].bt_parity[j] = PARITY_GOOD;
+			}
+			else
+			{
+				data[count].bt_parity[j] = PARITY_BAD;
+			}
+		}
+		printf("%d, %6.0f, %6.0f,  %s", count , data[count].batch_index, data[count].frame_index, command_name[data[count].channel_id]);
+        results[(int)data[count].frame_index-1][ct]=data[count].d[0].word;
+        printf("%6d, ", data[count].d[0].word);
+        results[(int)data[count].frame_index-1][ct+54]=data[count].d[1].word;
+        printf("%6d, ", data[count].d[1].word);
+        results[(int)data[count].frame_index-1][ct+108]=data[count].d[2].word;
+        printf("%6d\n", data[count].d[2].word);
+        count++;
+        if (ct<53) ct+=1;
+        else ct=0;
+	}
+	free(bt_raw_data);
+}
 
 //=========================================================================
 // SAVE DATA IN A FILE
@@ -562,7 +658,6 @@ void bt_save_buffer_data(const char *file_name, const bt_data *data, int num_sam
 {
 	int i, j;
 	FILE *fp;
-
 	fp = fopen(file_name, "w");
 	if (!fp)
 	{
@@ -582,9 +677,7 @@ void bt_save_buffer_data(const char *file_name, const bt_data *data, int num_sam
 		}
 		fprintf(fp, "\n");
 	}
-
 	fclose(fp);
-
 	printf("Saved data in %s\n", file_name);
 }
 
@@ -595,7 +688,6 @@ void bt_save_buffer_data(const char *file_name, const bt_data *data, int num_sam
 void bt_display_errors(BioTac bt_err_code)
 {
 	char *error_str = malloc(100 * sizeof(*error_str));
-
 	switch(bt_err_code)
 	{
 	case BT_WRONG_NUMBER_ASSIGNED:
@@ -615,11 +707,9 @@ void bt_display_errors(BioTac bt_err_code)
 		break;
 	}
 
-	printf("\nError: %s\n\n", error_str);
-
+    printf("\nError: %s\n\n", error_str);
 	free(error_str);
 }
-
 
 //=========================================================================
 // CLOSE CHEETAH CONFIGURATION

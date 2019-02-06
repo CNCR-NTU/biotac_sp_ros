@@ -12,18 +12,21 @@
 #define BT_SAMPLE_RATE_HZ_DEFAULT						4400
 #define BT_FRAMES_IN_BATCH_DEFAULT						5
 #define BT_BATCH_MS_DEFAULT								50
-#define BT_FRAME_STRUCTURE_DEFAULT  					{\
-														BT_E01_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E02_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
-														BT_E03_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E04_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
-														BT_E05_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E06_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
-														BT_E07_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E08_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
-														BT_E09_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E10_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
-														BT_E11_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E12_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
-														BT_E13_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E14_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
-														BT_E15_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E16_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
-														BT_E17_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E18_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
-														BT_E19_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_PDC_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
-														BT_TAC_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_TDC_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, '\0'}
+#define BT_FRAME_STRUCTURE_DEFAULT {\
+					BT_E01_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E02_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
+					BT_E03_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E04_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
+				    	BT_E05_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E06_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
+				    	BT_E07_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E08_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
+				    	BT_E09_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E10_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
+				    	BT_E11_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E12_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
+				    	BT_E13_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E14_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
+				    	BT_E15_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E16_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
+				    	BT_E17_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E18_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
+				    	BT_E19_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E20_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
+				    	BT_E21_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E22_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
+				    	BT_E23_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_E24_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
+				    	BT_PDC_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, BT_TAC_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, \
+				    	BT_TDC_SAMPLING_COMMAND, BT_PAC_SAMPLING_COMMAND, '\0'}
 #ifndef BOOL
 typedef int			 									BOOL;
 #endif
@@ -74,6 +77,11 @@ typedef int			 									BOOL;
 #define BT_E17_SAMPLING									33						// // command index: 33
 #define BT_E18_SAMPLING									34						// // command index: 34
 #define BT_E19_SAMPLING									35						// // command index: 35
+#define BT_E20_SAMPLING									36						// // command index: 36
+#define BT_E21_SAMPLING									37						// // command index: 37
+#define BT_E22_SAMPLING									38						// // command index: 38
+#define BT_E23_SAMPLING									39						// // command index: 39
+#define BT_E24_SAMPLING									40						// // command index: 40
 
 #define BT_PAC_SAMPLING_COMMAND							0x80					//0b10000000 				// command index: 00
 #define BT_PDC_SAMPLING_COMMAND							0x83					//0b10000011				// command index: 01
@@ -101,6 +109,11 @@ typedef int			 									BOOL;
 #define BT_E17_SAMPLING_COMMAND							0xC2					//0b11000010				// command index: 33
 #define BT_E18_SAMPLING_COMMAND							0xC4					//0b11000100				// command index: 34
 #define BT_E19_SAMPLING_COMMAND							0xC7					//0b11000111				// command index: 35
+#define BT_E20_SAMPLING_COMMAND							0xC8					//0b11001000				// command index: 36
+#define BT_E21_SAMPLING_COMMAND							0xCB					//0b11001011				// command index: 37
+#define BT_E22_SAMPLING_COMMAND							0xCD					//0b11001101				// command index: 38
+#define BT_E23_SAMPLING_COMMAND							0xCE					//0b11001110				// command index: 39
+#define BT_E24_SAMPLING_COMMAND							0xD0					//0b11010000				// command index: 40
 
 // resend command //
 #define BT_RESEND_COMMAND								0x20					//0b00100000
@@ -219,8 +232,10 @@ BioTac 		bt_cheetah_get_properties(Cheetah ch_handle, int bt_select, bt_property
 BioTac 		bt_cheetah_configure_batch(Cheetah ch_handle, bt_info *biotac, int num_samples);
 bt_data*	bt_configure_save_buffer(int num_samples);
 void 		bt_cheetah_collect_batch(Cheetah ch_handle, const bt_info *biotac, bt_data *data, BOOL print_flag);
+void        bt_cheetah_collect_batch_ntu(Cheetah ch_handle, const bt_info *biotac, bt_data *data, int results[4][162]);
 void		bt_display_errors(BioTac bt_err_code);
 void 		bt_save_buffer_data(const char *file_name, const bt_data *data, int num_samples);
 void 		bt_cheetah_close(Cheetah ch_handle);
+
 
 #endif /* BIOTAC_H_ */
