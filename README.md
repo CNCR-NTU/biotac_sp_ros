@@ -54,6 +54,7 @@ $ source devel/setup.sh
 ## Step 6: run
 
 Run terminator
+
 `$ terminator`
 
 Open 3x terminals in terminator
