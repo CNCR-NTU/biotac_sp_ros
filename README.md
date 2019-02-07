@@ -87,8 +87,11 @@ E1_s02, PAC_s02, E2_s02, PAC_s02,...,E24_s02, PAC_s02, PDC_s02, PAC_s02, PAC_s02
 E1_s03, PAC_s03, E2_s03, PAC_s03,...,E24_s03, PAC_s03, PDC_s03, PAC_s03, PAC_s03, TAC_s03, PAC_s03, TDC_s03, PAC_s03]
 
 where:
+
 s01 - sensor 1
+
 s02 - sensor 2
+
 s03 - sensor 3
 
 With exception of the time, each of the values is the average of the individual values of the 4x frames collected during 1 sec.
