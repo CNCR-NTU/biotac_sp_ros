@@ -36,6 +36,37 @@ $ sudo apt install build-essential git terminator
 $ cd ~/catkin_ws/src
 $ git clone https://github.com/pedrombmachado/biotac_sp_ros.git
 ```
+
+## Step 4: install the drivers
+```
+$ cd biotac_sp_ros
+$ ./installCheetahDriver.sh
+```
+
+## Step 5: compile and install
+```
+$ cd ~/catkin_ws
+$ catkin_make
+$ catkin_make install
+$ source devel/setup.sh
+```
+
+## Step 6: run
+
+Run terminator
+
+`$ terminator`
+
+Open 3x terminals in terminator
+
+### terminal 1
+`$ roscore` 
+
+### terminal 2
+`$ rosrun biotac_sp_ros biotac_sp_ros` 
+
+### terminal 3
+`$ rostopic echo /biotac_sp_ros`
 # Understanding the generated data
 4x data frames are colected per second. Each frame is composed follows the recommended Dafault sampling sequence.
 
@@ -68,36 +99,3 @@ Computational Neurosciences and Cognitive Robotics Group at the Nottingham Trent
 Pedro Machado <pedro.baptistamachado@ntu.ac.uk>
 
 Martin McGinnity <martin.mcginnity@ntu.ac.uk>
-## Step 4: install the drivers
-```
-$ cd biotac_sp_ros
-$ ./installCheetahDriver.sh
-```
-
-## Step 5: compile and install
-```
-$ cd ~/catkin_ws
-$ catkin_make
-$ catkin_make install
-$ source devel/setup.sh
-```
-
-## Step 6: run
-
-Run terminator
-
-`$ terminator`
-
-Open 3x terminals in terminator
-
-### terminal 1
-`$ roscore` 
-
-### terminal 2
-`$ rosrun biotac_sp_ros biotac_sp_ros` 
-
-### terminal 3
-`$ rostopic echo /biotac_sp_ros`
-
-# Support
-Pedro Machado <pedro.baptistamachado@ntu.ac.uk>
