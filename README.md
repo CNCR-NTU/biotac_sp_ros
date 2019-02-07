@@ -4,6 +4,9 @@ This is repository for hosting the Biotac SP sensors sofware released under the 
 
 # Requirements
 
+## Documentation
+* [Biotac SP user manual](https://github.com/pedrombmachado/biotac_sp/blob/master/doc/BioTac_SP_Product_Manual.pdf)
+
 ## Hardware
 * 3x Biotac SP sensors
 * Biotac Board
