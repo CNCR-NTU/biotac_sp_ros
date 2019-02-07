@@ -65,7 +65,7 @@ Open 3x terminals in terminator
 `$ rosrun biotac_sp_ros biotac_sp_ros` 
 
 ### terminal 3
-`rostopic echo /biotac_sp_ros`
+`$ rostopic echo /biotac_sp_ros`
 
 # Support
 Pedro Machado <pedro.baptistamachado@ntu.ac.uk>
