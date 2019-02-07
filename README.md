@@ -36,7 +36,38 @@ $ sudo apt install build-essential git terminator
 $ cd ~/catkin_ws/src
 $ git clone https://github.com/pedrombmachado/biotac_sp_ros.git
 ```
+# Understanding the generated data
+4x data frames are colected per second. Each frame is composed follows the recommended Dafault sampling sequence.
 
+Figure 2 shows the Default Sampling	Sequence
+
+![](https://github.com/pedrombmachado/biotac_sp/blob/master/doc/data_sampling.png)
+
+Figure 2: Default sampling sequence
+
+Table 1: Bandwidth and Sampling rate for Default Sampling Sequence at 4.4kHz
+
+![](https://github.com/pedrombmachado/biotac_sp/blob/master/doc/data_sampling_bandwidth.png)
+
+The output is a vector of 163 columns where:
+
+[time, E1_s01, PAC_s01, E2_s01, PAC_s01,...,E24_s01, PAC_s01, PDC_s01, PAC_s01, PAC_s01, TAC_s01, PAC_s01, TDC_s01, PAC_s01,
+E1_s02, PAC_s02, E2_s02, PAC_s02,...,E24_s02, PAC_s02, PDC_s02, PAC_s02, PAC_s02, TAC_s02, PAC_s02, TDC_s02, PAC_s02,
+E1_s03, PAC_s03, E2_s03, PAC_s03,...,E24_s03, PAC_s03, PDC_s03, PAC_s03, PAC_s03, TAC_s03, PAC_s03, TDC_s03, PAC_s03]
+
+where:
+s01 - sensor 1
+s02 - sensor 2
+s03 - sensor 3
+
+With exception of the time, each of the values is the average of the individual values of the 4x frames collected during 1 sec.
+
+# Contacts
+Computational Neurosciences and Cognitive Robotics Group at the Nottingham Trent University.
+
+Pedro Machado <pedro.baptistamachado@ntu.ac.uk>
+
+Martin McGinnity <martin.mcginnity@ntu.ac.uk>
 ## Step 4: install the drivers
 ```
 $ cd biotac_sp_ros
