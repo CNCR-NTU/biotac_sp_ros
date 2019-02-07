@@ -67,7 +67,8 @@ Open 3x terminals in terminator
 
 ### terminal 3
 `$ rostopic echo /biotac_sp_ros`
-# Understanding the generated data
+
+# Understanding the data
 4x data frames are colected per second. Each frame is composed follows the recommended Dafault sampling sequence.
 
 Figure 2 shows the Default Sampling	Sequence
