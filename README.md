@@ -80,6 +80,12 @@ Table 1: Bandwidth and Sampling rate for Default Sampling Sequence at 4.4kHz
 
 ![](https://github.com/pedrombmachado/biotac_sp/blob/master/doc/data_sampling_bandwidth.png)
 
+Figure 3 shows the Biotac SP electrodes distribution
+
+![](https://github.com/pedrombmachado/biotac_sp/blob/master/doc/Electrodes_distribution.jpg)
+
+Figure 3 Biotac SP electrodes distribution
+
 The output is a vector of 163 columns where:
 
 [time, E1_s01, PAC_s01, E2_s01, PAC_s01,...,E24_s01, PAC_s01, PDC_s01, PAC_s01, PAC_s01, TAC_s01, PAC_s01, TDC_s01, PAC_s01,
