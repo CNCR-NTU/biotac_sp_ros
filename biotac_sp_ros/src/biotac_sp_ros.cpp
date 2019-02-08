@@ -128,10 +128,10 @@ int main(int argc,char **argv)
 	}
 	static int results[4][162]; 
     static int results_vec[162];
-    std::stringstream s_results;
 
     while (ros::ok())
     {
+        std::stringstream s_results;
         std_msgs::String msg;
         /*************************************/
         /* --- Configure the save buffer --- */
