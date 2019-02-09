@@ -86,7 +86,7 @@ Table 1: Bandwidth and Sampling rate for Default Sampling Sequence at 4.4kHz
 
 Figure 3 shows the Biotac SP electrodes distribution
 
-![](https://github.com/pedrombmachado/biotac_sp/blob/master/doc/Electrodes_distribution.jpg)
+![](https://github.com/pedrombmachado/biotac_sp/blob/master/doc/Electrodes_distribution.png)
 
 Figure 3 Biotac SP electrodes distribution
 
