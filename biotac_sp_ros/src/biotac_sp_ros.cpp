@@ -191,6 +191,7 @@ int main(int argc,char **argv)
         biotac_sp_pub.publish(msg);
         loop_rate.sleep();
     }
+    printf("\nBiotac SP ROS exited with success!\n");
     bt_cheetah_close(ch_handle);
 
     return 0;
