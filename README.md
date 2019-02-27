@@ -37,7 +37,7 @@ $ sudo apt install build-essential git terminator
 ## Step 3: clone the repository
 ```
 $ cd ~/catkin_ws/src
-$ git clone https://github.com/pedrombmachado/biotac_sp_ros.git
+$ git clone https://github.com/CNCR-NTU/biotac_sp_ros.git
 ```
 
 ## Step 4: install the drivers
@@ -76,17 +76,17 @@ Open 3x terminals in terminator
 
 Figure 2 shows the Default Sampling	Sequence
 
-![](https://github.com/pedrombmachado/biotac_sp/blob/master/doc/data_sampling.png)
+![](https://github.com/CNCR-NTU/biotac_sp/blob/master/doc/data_sampling.png)
 
 Figure 2: Default sampling sequence
 
 Table 1: Bandwidth and Sampling rate for Default Sampling Sequence at 4.4kHz
 
-![](https://github.com/pedrombmachado/biotac_sp/blob/master/doc/data_sampling_bandwidth.png)
+![](https://github.com/CNCR-NTU/biotac_sp/blob/master/doc/data_sampling_bandwidth.png)
 
 Figure 3 shows the Biotac SP electrodes distribution
 
-![](https://github.com/pedrombmachado/biotac_sp/blob/master/doc/Electrodes_distribution.png)
+![](https://github.com/CNCR-NTU/biotac_sp/blob/master/doc/Electrodes_distribution.png)
 
 Figure 3 Biotac SP electrodes distribution
 
