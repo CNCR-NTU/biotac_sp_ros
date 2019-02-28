@@ -12,7 +12,6 @@ catkin_package(
     DEPENDS
     CATKIN_DEPENDS
     INCLUDE_DIRS 
-    LIBRARIES cheetah
 )
 
 
