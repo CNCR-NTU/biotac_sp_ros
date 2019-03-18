@@ -177,7 +177,6 @@ int main(int argc,char **argv)
             }
         }
 
-        s_results<<"[";
         s_results<<ros::Time::now();
         for (int l=0; l<162;++l)
         {
@@ -185,7 +184,6 @@ int main(int argc,char **argv)
         }
 
         free(data);
-        s_results<<"]";
         msg.data = s_results.str();
         ROS_INFO("%s", msg.data.c_str());
         biotac_sp_pub.publish(msg);
