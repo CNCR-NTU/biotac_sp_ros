@@ -185,7 +185,8 @@ int main(int argc,char **argv)
 
         free(data);
         msg.data = s_results.str();
-        ROS_INFO("%s", msg.data.c_str());
+        printf("\n %s",msg.data.c_str());
+	//ROS_INFO("%s", msg.data.c_str());
         biotac_sp_pub.publish(msg);
         loop_rate.sleep();
     }
