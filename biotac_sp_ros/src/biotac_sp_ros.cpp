@@ -128,7 +128,7 @@ int main(int argc,char **argv)
 	}
 	static int results[4][162]; 
     static int results_vec[162];
-
+    printf("\nBiotac sp ROS service running.\nResults are being published in topic /biotac_sp_ros.");
     while (ros::ok())
     {
         std::stringstream s_results;
@@ -185,12 +185,12 @@ int main(int argc,char **argv)
 
         free(data);
         msg.data = s_results.str();
-        printf("\n %s",msg.data.c_str());
-	//ROS_INFO("%s", msg.data.c_str());
+        //printf("\n %s",msg.data.c_str());
+        //ROS_INFO("%s", msg.data.c_str());
         biotac_sp_pub.publish(msg);
         loop_rate.sleep();
     }
-    printf("\nBiotac SP ROS exited with success!\n");
+    printf("\nBiotac SP ROS service exited with success!\n");
     bt_cheetah_close(ch_handle);
 
     return 0;
