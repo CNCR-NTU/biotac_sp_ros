@@ -34,6 +34,7 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+#include <time.h>
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 
@@ -124,11 +125,13 @@ int main(int argc,char **argv)
 	}
 	else
 	{
-		printf("\n%d BioTac(s) detected.\n\n", biotac.number_of_biotacs);
+		std::cout<<"\nBioTac(s) detected:"<< biotac.number_of_biotacs<<".\n\n";
 	}
 	static int results[4][162]; 
     static int results_vec[162];
-    printf("\nBiotac sp ROS service running.\nResults are being published in topic /biotac_sp_ros.");
+    std::cout<<"Biotac sp ROS service running... Press <ctrl> <c> to stop.\nResults are being published in topic /biotac_sp_ros.\n";
+    loop_rate.sleep();
+    
     while (ros::ok())
     {
         std::stringstream s_results;
@@ -136,7 +139,7 @@ int main(int argc,char **argv)
         /*************************************/
         /* --- Configure the save buffer --- */
         /*************************************/
-        //printf("Number of samples: %d\n",number_of_samples);
+        //std::cout<<"Number of samples:"<<number_of_samples<<"\n";
         data = bt_configure_save_buffer(number_of_samples);
 
         /*******************************/
@@ -150,14 +153,14 @@ int main(int argc,char **argv)
         }
         else
         {
-            //printf("\nConfigured the batch\n");
+            //std::cout<<"\nBatch condifured\n";
         }
 
         /**********************************************************/
         /* --- Collect 4 samples in a second and publish data --- */
         /**********************************************************/
         number_of_loops=1;
-        //printf("Start collecting BioTac...\n");
+        //std::cout<<"Start collecting BioTac...\n";
         
         memset(results, 0, sizeof results);
 
@@ -185,12 +188,12 @@ int main(int argc,char **argv)
 
         free(data);
         msg.data = s_results.str();
-        //printf("\n %s",msg.data.c_str());
+        //std::cout<<"\n"<<msg.data.c_str();
         //ROS_INFO("%s", msg.data.c_str());
         biotac_sp_pub.publish(msg);
         loop_rate.sleep();
     }
-    printf("\nBiotac SP ROS service exited with success!\n");
+    std::cout<<"\nBiotac SP ROS service exited with success!\n";
     bt_cheetah_close(ch_handle);
 
     return 0;
