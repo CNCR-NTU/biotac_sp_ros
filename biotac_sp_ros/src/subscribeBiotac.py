@@ -47,6 +47,7 @@ __platforms__ = "Sawyer and AR10 hand"
 import rospy
 from std_msgs.msg import String
 import numpy as np
+import pylab
 
 #===============================================================================
 # GLOBAL VARIABLES DECLARATIONS
@@ -65,14 +66,36 @@ def callback_biotac(data):
     mat = np.asarray(buffer)
 
     mat = np.asarray(mat)
-    fields_name = ["E1", "PAC", "E2", "PAC", "E3", "PAC", "E4", "PAC", "E5", "PAC", "E6", "PAC", "E7", "PAC", "E8",\
-                   "PAC", "E9", "PAC", "E10", "PAC", "E11", "PAC", "E12", "PAC", "E13", "PAC", "E14", "PAC", "E15",\
-                   "PAC", "E16", "PAC", "E17", "PAC", "E18", "PAC", "E19", "PAC", "E20", "PAC", "E21", "PAC", "E22",\
+    fields_name = ["E1", "PAC", "E2", "PAC", "E3", "PAC", "E4", "PAC", "E5", "PAC", "E6", "PAC", "E7", "PAC", "E8", \
+                   "PAC", "E9", "PAC", "E10", "PAC", "E11", "PAC", "E12", "PAC", "E13", "PAC", "E14", "PAC", "E15", \
+                   "PAC", "E16", "PAC", "E17", "PAC", "E18", "PAC", "E19", "PAC", "E20", "PAC", "E21", "PAC", "E22", \
                    "PAC", "E23", "PAC", "E24", "PAC", "PDC", "PAC", "TAC", "PAC", "TDC", "PAC"]
+    vis_mat=[]
+    for sensor in range(0, 3):
+        pac=0
+        for i in range(2,len(fields_name)+1,2):
+            pac+=int(mat[i+ sensor * len(fields_name)])
+        print(i,len(fields_name))
+        pac=int(pac/int(len(fields_name)))
+        vis_mat.append(np.asarray([[0,int(mat[21+ sensor * len(fields_name)]),0,0,0,int(mat[1+ sensor * len(fields_name)]),0],
+                            [0,0,int(mat[23+ sensor * len(fields_name)]),0,int(mat[3+ sensor * len(fields_name)]),0,0],
+                            [int(mat[51+ sensor * len(fields_name)]),0,0,int(mat[41+ sensor * len(fields_name)]),0,0,pac],
+                            [0,0,int(mat[45+ sensor * len(fields_name)]),0, int(mat[43+ sensor * len(fields_name)]),0,0],
+                            [int(mat[25+ sensor * len(fields_name)]),int(mat[27+ sensor * len(fields_name)]),0,int(mat[47+ sensor * len(fields_name)]),0,int(mat[7+ sensor * len(fields_name)]),int(mat[5+ sensor * len(fields_name)])],
+                            [0,0,int(mat[29+ sensor * len(fields_name)]),0,int(mat[9+ sensor * len(fields_name)]),0,0],
+                            [int(mat[31+ sensor * len(fields_name)]),0,0,0,0,0,int(mat[11+ sensor * len(fields_name)])],
+                            [0,int(mat[33+ sensor * len(fields_name)]),0,0,0,int(mat[13+ sensor * len(fields_name)]),0],
+                            [int(mat[53+ sensor * len(fields_name)]),0,int(mat[35+ sensor * len(fields_name)]),0,int(mat[15+ sensor * len(fields_name)]),0,int(mat[49+ sensor * len(fields_name)])],
+                            [0,int(mat[37+ sensor * len(fields_name)]),0,0,0,int(mat[17+ sensor * len(fields_name)]),0],
+                            [int(mat[39+ sensor * len(fields_name)]),0,0,0,0,0,int(mat[19+ sensor * len(fields_name)])]]))
+
     print("ROS time:", mat[0])
     for sensor in range(0, 3):
-        print("********* Sensor", sensor, "*********\n", fields_name, "\n",
-              mat[1 + sensor * len(fields_name):(sensor + 1) * len(fields_name)])
+        if sensor==0:
+            #print(vis_mat[sensor])
+            pylab.matshow(vis_mat[sensor])
+            pylab.show()
+            pylab.pause(0.01)
 
 def listener():
     while not rospy.is_shutdown():
