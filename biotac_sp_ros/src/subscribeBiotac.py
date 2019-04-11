@@ -89,17 +89,16 @@ def callback_biotac(data):
                             [0,int(mat[37+ sensor * len(fields_name)]),0,0,0,int(mat[17+ sensor * len(fields_name)]),0],
                             [int(mat[39+ sensor * len(fields_name)]),0,0,0,0,0,int(mat[19+ sensor * len(fields_name)])]]))
 
-    print("ROS time:", mat[0])
+    #print("ROS time:", mat[0])
     for sensor in range(0, 3):
-        test=np.array(vis_mat[sensor],dtype=np.uint8)
-        test=np.uint8(test/test.max()*255.0)
-        scale_percent = 9000  # percent of original size
-        width = int(test.shape[1] * scale_percent / 100)
-        height = int(test.shape[0] * scale_percent / 100)
+        aux=np.array(vis_mat[sensor],dtype=np.uint8)
+        scale_percent = 8000  # percent of original size
+        width = int(aux.shape[1] * scale_percent / 100)
+        height = int(aux.shape[0] * scale_percent / 100)
         dim = (width, height)
         # resize image
-        test = cv2.resize(test, dim, interpolation=cv2.INTER_AREA)
-        im_color = cv2.applyColorMap(test, cv2.COLORMAP_JET)
+        aux = cv2.resize(aux, dim, interpolation=cv2.INTER_AREA)
+        im_color=(cv2.applyColorMap(aux, cv2.COLORMAP_HOT))
         cv2.imshow("Sensor "+str(sensor), im_color)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         rospy.signal_shutdown('Quit')
