@@ -47,7 +47,8 @@ __platforms__ = "Sawyer and AR10 hand"
 import rospy
 from std_msgs.msg import String
 import numpy as np
-import pylab
+import matplotlib
+import cv2
 
 #===============================================================================
 # GLOBAL VARIABLES DECLARATIONS
@@ -75,7 +76,6 @@ def callback_biotac(data):
         pac=0
         for i in range(2,len(fields_name)+1,2):
             pac+=int(mat[i+ sensor * len(fields_name)])
-        print(i,len(fields_name))
         pac=int(pac/int(len(fields_name)))
         vis_mat.append(np.asarray([[0,int(mat[21+ sensor * len(fields_name)]),0,0,0,int(mat[1+ sensor * len(fields_name)]),0],
                             [0,0,int(mat[23+ sensor * len(fields_name)]),0,int(mat[3+ sensor * len(fields_name)]),0,0],
@@ -91,11 +91,19 @@ def callback_biotac(data):
 
     print("ROS time:", mat[0])
     for sensor in range(0, 3):
-        if sensor==0:
-            #print(vis_mat[sensor])
-            pylab.matshow(vis_mat[sensor])
-            pylab.show()
-            pylab.pause(0.01)
+        test=np.array(vis_mat[sensor],dtype=np.uint8)
+        test=np.uint8(test/test.max()*255.0)
+        scale_percent = 9000  # percent of original size
+        width = int(test.shape[1] * scale_percent / 100)
+        height = int(test.shape[0] * scale_percent / 100)
+        dim = (width, height)
+        # resize image
+        test = cv2.resize(test, dim, interpolation=cv2.INTER_AREA)
+        im_color = cv2.applyColorMap(test, cv2.COLORMAP_JET)
+        cv2.imshow("Sensor "+str(sensor), im_color)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        rospy.signal_shutdown('Quit')
+        cv2.destroyAllWindows()
 
 def listener():
     while not rospy.is_shutdown():
