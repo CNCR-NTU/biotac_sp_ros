@@ -36,7 +36,7 @@ without the express permission of Prof. Martin McGinnity <martin.mcginnity@ntu.a
 __license__ = '2019 (C) CNCR@NTU, All rights reserved'
 __date__ = '13/02/2019'
 __version__ = '0.1'
-__file_name__ = 'subscribeBiotac.py'
+__file_name__ = 'visualiseBiotac.py'
 __description__ = 'Subscribe Biotac snesors'
 __compatibility__ = "Python 2 and Python 3"
 __platforms__ = "Sawyer and AR10 hand"
@@ -47,13 +47,15 @@ __platforms__ = "Sawyer and AR10 hand"
 import rospy
 from std_msgs.msg import String
 import numpy as np
-import matplotlib
 import cv2
+import os
 
 #===============================================================================
 # GLOBAL VARIABLES DECLARATIONS
 #===============================================================================
-
+PATH=os.path.dirname(os.path.realpath(__file__))
+P=0.98
+recordFlag=True
 #===============================================================================
 # METHODS
 #===============================================================================
@@ -62,6 +64,7 @@ import cv2
 #  TESTING AREA
 #===============================================================================
 def callback_biotac(data):
+    global flag, prev_mat, out
     buffer = data.data
     buffer = buffer.split(',')
     mat = np.asarray(buffer)
@@ -72,6 +75,14 @@ def callback_biotac(data):
                    "PAC", "E16", "PAC", "E17", "PAC", "E18", "PAC", "E19", "PAC", "E20", "PAC", "E21", "PAC", "E22", \
                    "PAC", "E23", "PAC", "E24", "PAC", "PDC", "PAC", "TAC", "PAC", "TDC", "PAC"]
     vis_mat=[]
+    if flag:
+        prev_mat=mat[1:len(mat)]
+        flag=False
+    else:
+        for i in range(1, len(mat)):
+            prev_mat[i-1]=int((1-P)*float(mat[i])+P*float(prev_mat[i-1]))
+        for i in range(1, len(mat)):
+            mat[i] = np.abs(int(mat[i])-int(prev_mat[i - 1]))
     for sensor in range(0, 3):
         pac=0
         for i in range(2,len(fields_name)+1,2):
@@ -99,19 +110,34 @@ def callback_biotac(data):
         # resize image
         aux = cv2.resize(aux, dim, interpolation=cv2.INTER_AREA)
         im_color=(cv2.applyColorMap(aux, cv2.COLORMAP_HOT))
+        if recordFlag:
+            out[sensor].write(im_color)
         cv2.imshow("Sensor "+str(sensor), im_color)
+
     if cv2.waitKey(1) & 0xFF == ord('q'):
         rospy.signal_shutdown('Quit')
         cv2.destroyAllWindows()
 
+
 def listener():
+    global flag, out
     while not rospy.is_shutdown():
         try:
-            rospy.Subscriber("/biotac_sp_ros", String,callback_biotac)
+            rospy.Subscriber("/biotac_sp_ros", String, callback_biotac)
+            flag=True
+            if recordFlag:
+                # Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
+                out = [cv2.VideoWriter(PATH+'/dataset/biotac_1.avi', cv2.VideoWriter_fourcc('M','J','P','G'), 10, (880, 560)), \
+                       cv2.VideoWriter(PATH+'/dataset/biotac_2.avi', cv2.VideoWriter_fourcc('M','J','P','G'), 10, (880, 560)), \
+                       cv2.VideoWriter(PATH+'/dataset/biotac_3.avi', cv2.VideoWriter_fourcc('M','J','P','G'), 10, (880, 560))]
             rospy.spin()
         except rospy.ROSInterruptException:
+            for i in range(0, 3):
+                out[i].release()
             print("Shuting down the Biotac subscriber!")
         except IOError:
+            for i in range(0, 3):
+                out[i].release()
             print(IOError)
             print("Shuting down the Biotac subscriber!")
 
@@ -119,7 +145,7 @@ def listener():
 # MAIN METHOD
 #===============================================================================
 if __name__ == '__main__':
-    print("[Initializing Sawyer ROS node...]\n")
+    print("[Initializing Biotac subscriber...]\n")
     rospy.init_node('Move_position', anonymous=True)
     # if not flag:
     #     main()
