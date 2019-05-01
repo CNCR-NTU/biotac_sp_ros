@@ -97,6 +97,7 @@ def callback_biotac(data,pub):
                             [int(mat[39+ sensor * len(fields_name)]),0,0,0,0,0,int(mat[19+ sensor * len(fields_name)])]]))
 
     #print("ROS time:", mat[0])
+    message=[0,0,0]
     for sensor in range(0, 3):
         aux=np.array(vis_mat[sensor],dtype=np.uint8)
         ct=0
@@ -105,9 +106,8 @@ def callback_biotac(data,pub):
             if aux1[i]>100:
                 ct+=1
                 if ct>2:
-                    pub.publish("%s, 1"%sensor)
+                    message[sensor]=1
                     break
-
         if visualisationFlag:
             scale_percent = 8000  # percent of original size
             width = int(aux.shape[1] * scale_percent / 100)
@@ -117,6 +117,12 @@ def callback_biotac(data,pub):
             aux = cv2.resize(aux, dim, interpolation=cv2.INTER_AREA)
             im_color=(cv2.applyColorMap(aux, cv2.COLORMAP_HOT))
             cv2.imshow("Sensor "+str(sensor), im_color)
+    msg2pub=""
+    for sensor in range(0, 3):
+        msg2pub+=str(sensor)+", "+str(message[sensor])
+        if sensor<2:
+            msg2pub+=", "
+    pub.publish(msg2pub)
 
 
     if visualisationFlag and cv2.waitKey(1) & 0xFF == ord('q'):
