@@ -55,13 +55,8 @@ import os
 #===============================================================================
 PATH=os.path.dirname(os.path.realpath(__file__))
 P=0.98
-recordFlag=True
 #===============================================================================
 # METHODS
-#===============================================================================
-
-#===============================================================================
-#  TESTING AREA
 #===============================================================================
 def callback_biotac(data):
     global flag, prev_mat, out
@@ -110,8 +105,6 @@ def callback_biotac(data):
         # resize image
         aux = cv2.resize(aux, dim, interpolation=cv2.INTER_AREA)
         im_color=(cv2.applyColorMap(aux, cv2.COLORMAP_HOT))
-        if recordFlag:
-            out[sensor].write(im_color)
         cv2.imshow("Sensor "+str(sensor), im_color)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -125,11 +118,6 @@ def listener():
         try:
             rospy.Subscriber("/biotac_sp_ros", String, callback_biotac)
             flag=True
-            if recordFlag:
-                # Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
-                out = [cv2.VideoWriter(PATH+'/dataset/biotac_1.avi', cv2.VideoWriter_fourcc('M','J','P','G'), 10, (880, 560)), \
-                       cv2.VideoWriter(PATH+'/dataset/biotac_2.avi', cv2.VideoWriter_fourcc('M','J','P','G'), 10, (880, 560)), \
-                       cv2.VideoWriter(PATH+'/dataset/biotac_3.avi', cv2.VideoWriter_fourcc('M','J','P','G'), 10, (880, 560))]
             rospy.spin()
         except rospy.ROSInterruptException:
             for i in range(0, 3):
@@ -140,6 +128,9 @@ def listener():
                 out[i].release()
             print(IOError)
             print("Shuting down the Biotac subscriber!")
+#===============================================================================
+#  TESTING AREA
+#===============================================================================
 
 #===============================================================================
 # MAIN METHOD
