@@ -55,10 +55,11 @@ import os
 #===============================================================================
 PATH=os.path.dirname(os.path.realpath(__file__))
 P=0.98
+visualisationFlag = False # True#
 #===============================================================================
 # METHODS
 #===============================================================================
-def callback_biotac(data):
+def callback_biotac(data,pub):
     global flag, prev_mat, out
     buffer = data.data
     buffer = buffer.split(',')
@@ -98,16 +99,27 @@ def callback_biotac(data):
     #print("ROS time:", mat[0])
     for sensor in range(0, 3):
         aux=np.array(vis_mat[sensor],dtype=np.uint8)
-        scale_percent = 8000  # percent of original size
-        width = int(aux.shape[1] * scale_percent / 100)
-        height = int(aux.shape[0] * scale_percent / 100)
-        dim = (width, height)
-        # resize image
-        aux = cv2.resize(aux, dim, interpolation=cv2.INTER_AREA)
-        im_color=(cv2.applyColorMap(aux, cv2.COLORMAP_HOT))
-        cv2.imshow("Sensor "+str(sensor), im_color)
+        ct=0
+        aux1=aux.reshape((aux.shape[0]*aux.shape[1]))
+        for i in range(0,len(aux1)):
+            if aux1[i]>100:
+                ct+=1
+                if ct>2:
+                    pub.publish("%s, 1"%sensor)
+                    break
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+        if visualisationFlag:
+            scale_percent = 8000  # percent of original size
+            width = int(aux.shape[1] * scale_percent / 100)
+            height = int(aux.shape[0] * scale_percent / 100)
+            dim = (width, height)
+            # resize image
+            aux = cv2.resize(aux, dim, interpolation=cv2.INTER_AREA)
+            im_color=(cv2.applyColorMap(aux, cv2.COLORMAP_HOT))
+            cv2.imshow("Sensor "+str(sensor), im_color)
+
+
+    if visualisationFlag and cv2.waitKey(1) & 0xFF == ord('q'):
         rospy.signal_shutdown('Quit')
         cv2.destroyAllWindows()
 
@@ -116,7 +128,9 @@ def listener():
     global flag, out
     while not rospy.is_shutdown():
         try:
-            rospy.Subscriber("/biotac_sp_ros", String, callback_biotac)
+            pub = rospy.Publisher('biotac/contact', String, queue_size=1)
+            rospy.Subscriber("/biotac_sp_ros", String, callback_biotac, (pub))
+            print("Contact detection published in topic: biotac/contact.")
             flag=True
             rospy.spin()
         except rospy.ROSInterruptException:
