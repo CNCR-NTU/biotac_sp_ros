@@ -150,7 +150,7 @@ def listener():
 # MAIN METHOD
 #===============================================================================
 if __name__ == '__main__':
-    print("[Initializing Biotac subscriber...]\n")
+    print("[Initialising contact detector...]\n")
     rospy.init_node('Move_position', anonymous=True)
     # if not flag:
     #     main()
