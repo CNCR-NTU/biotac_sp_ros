@@ -55,7 +55,7 @@ import os
 #===============================================================================
 PATH=os.path.dirname(os.path.realpath(__file__))
 P=0.98
-visualisationFlag = False # True#
+visualisationFlag = True# False #
 #===============================================================================
 # METHODS
 #===============================================================================
@@ -119,9 +119,9 @@ def callback_biotac(data,pub):
             cv2.imshow("Sensor "+str(sensor), im_color)
     msg2pub=""
     for sensor in range(0, 3):
-        msg2pub+=str(sensor)+", "+str(message[sensor])
+        msg2pub+=str(sensor)+","+str(message[sensor])
         if sensor<2:
-            msg2pub+=", "
+            msg2pub+=","
     pub.publish(msg2pub)
 
 
