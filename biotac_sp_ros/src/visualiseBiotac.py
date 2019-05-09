@@ -103,7 +103,7 @@ def callback_biotac(data,pub):
         ct=0
         aux1=aux.reshape((aux.shape[0]*aux.shape[1]))
         for i in range(0,len(aux1)):
-            if aux1[i]>150:
+            if aux1[i]>100:
                 ct+=1
                 if ct>2:
                     message[sensor]=1
