@@ -109,7 +109,7 @@ def callback_biotac(data,pub):
                     message[sensor]=1
                     break
         if visualisationFlag:
-            scale_percent = 6000  # percent of original size
+            scale_percent = 4000  # percent of original size
             width = int(aux.shape[1] * scale_percent / 100)
             height = int(aux.shape[0] * scale_percent / 100)
             dim = (width, height)
