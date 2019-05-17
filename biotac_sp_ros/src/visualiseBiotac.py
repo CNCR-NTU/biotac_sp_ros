@@ -105,7 +105,7 @@ def callback_biotac(data,pub):
         for i in range(0,len(aux1)):
             if aux1[i]>100:
                 ct+=1
-                if ct>2:
+                if ct>4:
                     message[sensor]=1
                     break
         if visualisationFlag:
