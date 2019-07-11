@@ -56,11 +56,12 @@ import os
 PATH=os.path.dirname(os.path.realpath(__file__))
 P=0.98
 visualisationFlag = True# False #
+global fsr
 #===============================================================================
 # METHODS
 #===============================================================================
 def callback_biotac(data,pub):
-    global flag, prev_mat, out
+    global flag, prev_mat, out, fsr
     buffer = data.data
     buffer = buffer.split(',')
     mat = np.asarray(buffer)
@@ -97,7 +98,8 @@ def callback_biotac(data,pub):
                             [int(mat[39+ sensor * len(fields_name)]),0,0,0,0,0,int(mat[19+ sensor * len(fields_name)])]]))
 
     #print("ROS time:", mat[0])
-    message=[0,0,0]
+    message=[0]*4
+    message[3]=fsr
     for sensor in range(0, 3):
         aux=np.array(vis_mat[sensor],dtype=np.uint8)
         ct=0
@@ -118,9 +120,9 @@ def callback_biotac(data,pub):
             im_color=(cv2.applyColorMap(aux, cv2.COLORMAP_HOT))
             cv2.imshow("Sensor "+str(sensor), im_color)
     msg2pub=""
-    for sensor in range(0, 3):
+    for sensor in range(0, 4):
         msg2pub+=str(sensor)+","+str(message[sensor])
-        if sensor<2:
+        if sensor<3:
             msg2pub+=","
     pub.publish(msg2pub)
 
@@ -129,6 +131,10 @@ def callback_biotac(data,pub):
         rospy.signal_shutdown('Quit')
         cv2.destroyAllWindows()
 
+def callback_fsr(data):
+    global fsr
+    if data.data.isdigit():
+        fsr=int(data.data)
 
 def listener():
     global flag, out
@@ -136,6 +142,7 @@ def listener():
         try:
             pub = rospy.Publisher('biotac/contact', String, queue_size=1)
             rospy.Subscriber("/biotac_sp_ros", String, callback_biotac, (pub))
+            rospy.Subscriber("/sensors/hand/fsr", String, callback_fsr)
             print("Contact detection published in topic: biotac/contact.")
             flag=True
             rospy.spin()
@@ -158,6 +165,7 @@ def listener():
 if __name__ == '__main__':
     print("[Initialising contact detector...]\n")
     rospy.init_node('Move_position', anonymous=True)
+    fsr=0
     # if not flag:
     #     main()
     #     flag = True
