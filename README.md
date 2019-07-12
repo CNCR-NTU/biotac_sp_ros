@@ -10,7 +10,7 @@ This is repository for hosting the Biotac SP sensors sofware released under the 
 ## Hardware
 * 3x Biotac SP sensors
 * Biotac Board
-* uUSB power cable for connecting the Biotac board
+* micro-USB power cable for connecting the Biotac board
 * Cheetah SPI host
 * USB-B cable.
 * Host pc
@@ -58,18 +58,8 @@ $ source devel/setup.sh
 
 Run terminator
 
-`$ terminator`
+`$ roslaunch biotac.launch`
 
-Open 3x terminals in terminator
-
-### terminal 1
-`$ roscore` 
-
-### terminal 2
-`$ rosrun biotac_sp_ros biotac_sp_ros` 
-
-### terminal 3
-`$ rostopic echo /biotac_sp_ros`
 
 # Understanding the data
 4x data frames are colected per second. Each frame is composed follows the recommended Dafault sampling sequence.

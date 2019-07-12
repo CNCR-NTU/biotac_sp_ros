@@ -15,11 +15,7 @@ This script is part of the of the enhanced grasp project
 :SINCE: 10/04/2019
 :VERSION: 0.1
 
-This file is part of <project> project.
-the Robot 2 Robot interaction project can not be copied and/or distributed without the express
-permission of Prof. Martin McGinnity <martin.mcginnity@ntu.ac.uk>
-
-Copyright (C) 2019 All rights reserved, Nottingham Trent University
+2019 (c) GPLv3, Nottingham Trent University
 Computational Neuroscience and Cognitive Robotics Laboratory
 email:  pedro.baptistamachado@ntu.ac.uk
 website: https://www.ntu.ac.uk/research/groups-and-centres/groups/computational-neuroscience-and-cognitive-robotics-laboratory
@@ -31,15 +27,15 @@ website: https://www.ntu.ac.uk/research/groups-and-centres/groups/computational-
 # ===============================================================================
 __author__ = 'Pedro Machado'
 __contact__ = 'pedro.baptistamachado@ntu.ac.uk'
-__copyright__ = 'Enhanced grasping project can not be copied and/or distributed \
-without the express permission of Prof. Martin McGinnity <martin.mcginnity@ntu.ac.uk'
-__license__ = '2019 (C) CNCR@NTU, All rights reserved'
-__date__ = '13/02/2019'
-__version__ = '0.1'
+__copyright__ = '2019 (C) GPLv3, CNCR@NTU, Prof. Martin McGinnity <martin.mcginnity@ntu.ac.uk'
+__license__ = 'GPLv3'
+__date__ = '12/07/2019'
+__version__ = '1.0'
 __file_name__ = 'visualiseBiotac.py'
-__description__ = 'Subscribe Biotac snesors'
+__description__ = 'Subscribe the Biotac sensors raw data and display the data per sensor'
 __compatibility__ = "Python 2 and Python 3"
-__platforms__ = "Sawyer and AR10 hand"
+__platforms__ = "i386, x86_64, arm32 and arm64"
+__diff__= "GPLv3 , new lauch file and publication in 3 topics"
 
 #===============================================================================
 # IMPORT STATEMENTS
@@ -49,6 +45,8 @@ from std_msgs.msg import String
 import numpy as np
 import cv2
 import os
+from rospy_tutorials.msg import Floats
+from rospy.numpy_msg import numpy_msg
 
 #===============================================================================
 # GLOBAL VARIABLES DECLARATIONS
@@ -60,7 +58,8 @@ global fsr
 #===============================================================================
 # METHODS
 #===============================================================================
-def callback_biotac(data,pub):
+def callback_biotac(data,(pub0,pub1,pub2)):
+    publishers=[pub0,pub1,pub2]
     global flag, prev_mat, out, fsr
     buffer = data.data
     buffer = buffer.split(',')
@@ -97,19 +96,9 @@ def callback_biotac(data,pub):
                             [0,int(mat[37+ sensor * len(fields_name)]),0,0,0,int(mat[17+ sensor * len(fields_name)]),0],
                             [int(mat[39+ sensor * len(fields_name)]),0,0,0,0,0,int(mat[19+ sensor * len(fields_name)])]]))
 
-    #print("ROS time:", mat[0])
-    message=[0]*4
-    message[3]=fsr
+        publishers[sensor].publish(np.asarray(vis_mat[sensor]))
     for sensor in range(0, 3):
         aux=np.array(vis_mat[sensor],dtype=np.uint8)
-        ct=0
-        aux1=aux.reshape((aux.shape[0]*aux.shape[1]))
-        for i in range(0,len(aux1)):
-            if aux1[i]>50:
-                ct+=1
-                if ct>4:
-                    message[sensor]=1
-                    break
         if visualisationFlag:
             scale_percent = 4000  # percent of original size
             width = int(aux.shape[1] * scale_percent / 100)
@@ -117,33 +106,25 @@ def callback_biotac(data,pub):
             dim = (width, height)
             # resize image
             aux = cv2.resize(aux, dim, interpolation=cv2.INTER_AREA)
-            im_color=(cv2.applyColorMap(aux, cv2.COLORMAP_HOT))
-            cv2.imshow("Sensor "+str(sensor), im_color)
-    msg2pub=""
-    for sensor in range(0, 4):
-        msg2pub+=str(sensor)+","+str(message[sensor])
-        if sensor<3:
-            msg2pub+=","
-    pub.publish(msg2pub)
-
+            im_color = (cv2.applyColorMap(aux, cv2.COLORMAP_HOT))
+            cv2.imshow("Sensor " + str(sensor), im_color)
 
     if visualisationFlag and cv2.waitKey(1) & 0xFF == ord('q'):
         rospy.signal_shutdown('Quit')
         cv2.destroyAllWindows()
 
-def callback_fsr(data):
-    global fsr
-    if data.data.isdigit():
-        fsr=int(data.data)
 
 def listener():
     global flag, out
     while not rospy.is_shutdown():
         try:
-            pub = rospy.Publisher('biotac/contact', String, queue_size=1)
-            rospy.Subscriber("/biotac_sp_ros", String, callback_biotac, (pub))
-            rospy.Subscriber("/sensors/hand/fsr", String, callback_fsr)
-            print("Contact detection published in topic: biotac/contact.")
+            pub0 = rospy.Publisher('biotac/sensor/0', numpy_msg(Floats),queue_size=10)
+            pub1 = rospy.Publisher('biotac/sensor/1', numpy_msg(Floats),queue_size=10)
+            pub2 = rospy.Publisher('biotac/sensor/2', numpy_msg(Floats),queue_size=10)
+            rospy.Subscriber("/biotac_sp_ros", String, callback_biotac, (pub0, pub1, pub2))
+            print("Sensor 0 published in topic: /biotac/sensor/0.")
+            print("Sensor 1 published in topic: /biotac/sensor/1.")
+            print("Sensor 2 published in topic: /biotac/sensor/2.")
             flag=True
             rospy.spin()
         except rospy.ROSInterruptException:

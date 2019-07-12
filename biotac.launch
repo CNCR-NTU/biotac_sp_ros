@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <machine name="local_alt" address="localhost" default="true"/>
+    <node name="biotac_driver" pkg="biotac_sp_ros" type="biotac_sp_ros" />
+    <node name="biotac_visualiser" pkg="biotac_sp_ros" type="visualiseBiotac.py" />
+</launch>
