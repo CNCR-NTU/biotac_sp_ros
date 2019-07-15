@@ -138,8 +138,8 @@ def listener():
 # MAIN METHOD
 #===============================================================================
 if __name__ == '__main__':
-    print("[Initialising contact detector...]\n")
-    rospy.init_node('Move_position', anonymous=True)
+    print("[Initialising biotac visualisation...]\n")
+    rospy.init_node('visualise_biotac', anonymous=True)
     fsr=0
     # if not flag:
     #     main()
