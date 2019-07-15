@@ -116,13 +116,13 @@ def listener():
     global flag
     while not rospy.is_shutdown():
         try:
-            pub0 = rospy.Publisher('biotac/sensor/0', numpy_msg(Floats),queue_size=10)
-            pub1 = rospy.Publisher('biotac/sensor/1', numpy_msg(Floats),queue_size=10)
-            pub2 = rospy.Publisher('biotac/sensor/2', numpy_msg(Floats),queue_size=10)
+            pub0 = rospy.Publisher('sensors/biotac/0', numpy_msg(Floats),queue_size=10)
+            pub1 = rospy.Publisher('sensors/biotac/1', numpy_msg(Floats),queue_size=10)
+            pub2 = rospy.Publisher('sensors/biotac/2', numpy_msg(Floats),queue_size=10)
             rospy.Subscriber("/biotac_sp_ros", String, callback_biotac, ([pub0, pub1, pub2]))
-            print("Sensor 0 published in topic: /biotac/sensor/0.")
-            print("Sensor 1 published in topic: /biotac/sensor/1.")
-            print("Sensor 2 published in topic: /biotac/sensor/2.")
+            print("Sensor 0 published in topic: /sensors/biotac/0.")
+            print("Sensor 1 published in topic: /sensors/biotac/1.")
+            print("Sensor 2 published in topic: /sensors/biotac/2.")
             flag=True
             rospy.spin()
         except rospy.ROSInterruptException:
