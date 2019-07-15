@@ -58,8 +58,7 @@ global fsr
 #===============================================================================
 # METHODS
 #===============================================================================
-def callback_biotac(data,(pub0,pub1,pub2)):
-    publishers=[pub0,pub1,pub2]
+def callback_biotac(data,publishers):
     global flag, prev_mat, fsr
     buffer = data.data
     buffer = buffer.split(',')
@@ -95,7 +94,6 @@ def callback_biotac(data,(pub0,pub1,pub2)):
                             [int(mat[53+ sensor * len(fields_name)]),0,int(mat[35+ sensor * len(fields_name)]),0,int(mat[15+ sensor * len(fields_name)]),0,int(mat[49+ sensor * len(fields_name)])],
                             [0,int(mat[37+ sensor * len(fields_name)]),0,0,0,int(mat[17+ sensor * len(fields_name)]),0],
                             [int(mat[39+ sensor * len(fields_name)]),0,0,0,0,0,int(mat[19+ sensor * len(fields_name)])]]))
-
         publishers[sensor].publish(np.asarray(vis_mat[sensor], dtype=np.float32).flatten('F'))
     for sensor in range(0, 3):
         aux=np.array(vis_mat[sensor],dtype=np.uint8)
@@ -121,7 +119,7 @@ def listener():
             pub0 = rospy.Publisher('biotac/sensor/0', numpy_msg(Floats),queue_size=10)
             pub1 = rospy.Publisher('biotac/sensor/1', numpy_msg(Floats),queue_size=10)
             pub2 = rospy.Publisher('biotac/sensor/2', numpy_msg(Floats),queue_size=10)
-            rospy.Subscriber("/biotac_sp_ros", String, callback_biotac, (pub0, pub1, pub2))
+            rospy.Subscriber("/biotac_sp_ros", String, callback_biotac, ([pub0, pub1, pub2]))
             print("Sensor 0 published in topic: /biotac/sensor/0.")
             print("Sensor 1 published in topic: /biotac/sensor/1.")
             print("Sensor 2 published in topic: /biotac/sensor/2.")
