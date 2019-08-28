@@ -50,7 +50,6 @@ $ ./installCheetahDriver.sh
 ```
 $ cd ~/catkin_ws
 $ catkin_make
-$ catkin_make install
 $ source devel/setup.sh
 ```
 
@@ -58,7 +57,7 @@ $ source devel/setup.sh
 
 Run terminator
 
-`$ roslaunch biotac.launch`
+`$ roslaunch biotac_sp_ros biotac.launch`
 
 
 # Understanding the data
