@@ -55,6 +55,8 @@ $ source devel/setup.sh
 
 ## Step 6: run
 
+Run terminator
+
 `$ roslaunch biotac_sp_ros biotac.launch`
 
 

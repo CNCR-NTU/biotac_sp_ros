@@ -69,15 +69,6 @@ def callback_biotac(data,publishers):
                    "PAC", "E9", "PAC", "E10", "PAC", "E11", "PAC", "E12", "PAC", "E13", "PAC", "E14", "PAC", "E15", \
                    "PAC", "E16", "PAC", "E17", "PAC", "E18", "PAC", "E19", "PAC", "E20", "PAC", "E21", "PAC", "E22", \
                    "PAC", "E23", "PAC", "E24", "PAC", "PDC", "PAC", "TAC", "PAC", "TDC", "PAC"]
-
-    # Dictionary to adress the respective sensors
-    fn = {
-        "E1": 1, "PAC": 2, "E2": 3, "E3": 5, "E4": 7, "E5": 9, "E6": 11, "E7": 13, "E8": 15, \
-        "E9": 17, "E10": 19, "E11": 21, "E12": 23, "E13": 25, "E14": 27, "E15": 29, \
-        "E16": 31, "E17": 33, "E18": 35, "E19": 37, "E20": 39, "E21": 41, "E22": 43, \
-        "E23": 45, "E24": 47, "PDC": 49, "TAC": 51, "TDC": 53
-    }
-
     vis_mat=[]
     if flag:
         prev_mat=mat[1:len(mat)]
@@ -92,17 +83,17 @@ def callback_biotac(data,publishers):
         for i in range(2,len(fields_name)+1,2):
             pac+=int(mat[i+ sensor * len(fields_name)])
         pac=int(pac/int(len(fields_name)))
-        vis_mat.append(np.asarray([[0,int(mat[fn["E11"]+ sensor * len(fields_name)]),0,0,0,int(mat[fn["E1"]+ sensor * len(fields_name)]),0],
-                            [0,0,int(mat[fn["E12"]+ sensor * len(fields_name)]),0,int(mat[fn["E2"]+ sensor * len(fields_name)]),0,0],
-                            [int(mat[fn["TAC"]+ sensor * len(fields_name)]),0,0,int(mat[fn["E21"]+ sensor * len(fields_name)]),0,0,pac],
-                            [0,0,int(mat[fn["E23"]+ sensor * len(fields_name)]),0, int(mat[fn["E22"]+ sensor * len(fields_name)]),0,0],
-                            [int(mat[fn["E13"]+ sensor * len(fields_name)]),int(mat[fn["E14"]+ sensor * len(fields_name)]),0,int(mat[fn["E24"]+ sensor * len(fields_name)]),0,int(mat[fn["E4"]+ sensor * len(fields_name)]),int(mat[fn["E3"]+ sensor * len(fields_name)])],
-                            [0,0,int(mat[fn["E15"]+ sensor * len(fields_name)]),0,int(mat[fn["E5"]+ sensor * len(fields_name)]),0,0],
-                            [int(mat[fn["E16"]+ sensor * len(fields_name)]),0,0,0,0,0,int(mat[fn["E6"]+ sensor * len(fields_name)])],
-                            [0,int(mat[fn["E17"]+ sensor * len(fields_name)]),0,0,0,int(mat[fn["E7"]+ sensor * len(fields_name)]),0],
-                            [int(mat[fn["TDC"]+ sensor * len(fields_name)]),0,int(mat[fn["E18"]+ sensor * len(fields_name)]),0,int(mat[fn["E8"]+ sensor * len(fields_name)]),0,int(mat[fn["PDC"]+ sensor * len(fields_name)])],
-                            [0,int(mat[fn["E19"]+ sensor * len(fields_name)]),0,0,0,int(mat[fn["E9"]+ sensor * len(fields_name)]),0],
-                            [int(mat[fn["E20"]+ sensor * len(fields_name)]),0,0,0,0,0,int(mat[fn["E10"]+ sensor * len(fields_name)])]]))
+        vis_mat.append(np.asarray([[0,int(mat[21+ sensor * len(fields_name)]),0,0,0,int(mat[1+ sensor * len(fields_name)]),0],
+                            [0,0,int(mat[23+ sensor * len(fields_name)]),0,int(mat[3+ sensor * len(fields_name)]),0,0],
+                            [int(mat[51+ sensor * len(fields_name)]),0,0,int(mat[41+ sensor * len(fields_name)]),0,0,pac],
+                            [0,0,int(mat[45+ sensor * len(fields_name)]),0, int(mat[43+ sensor * len(fields_name)]),0,0],
+                            [int(mat[25+ sensor * len(fields_name)]),int(mat[27+ sensor * len(fields_name)]),0,int(mat[47+ sensor * len(fields_name)]),0,int(mat[7+ sensor * len(fields_name)]),int(mat[5+ sensor * len(fields_name)])],
+                            [0,0,int(mat[29+ sensor * len(fields_name)]),0,int(mat[9+ sensor * len(fields_name)]),0,0],
+                            [int(mat[31+ sensor * len(fields_name)]),0,0,0,0,0,int(mat[11+ sensor * len(fields_name)])],
+                            [0,int(mat[33+ sensor * len(fields_name)]),0,0,0,int(mat[13+ sensor * len(fields_name)]),0],
+                            [int(mat[53+ sensor * len(fields_name)]),0,int(mat[35+ sensor * len(fields_name)]),0,int(mat[15+ sensor * len(fields_name)]),0,int(mat[49+ sensor * len(fields_name)])],
+                            [0,int(mat[37+ sensor * len(fields_name)]),0,0,0,int(mat[17+ sensor * len(fields_name)]),0],
+                            [int(mat[39+ sensor * len(fields_name)]),0,0,0,0,0,int(mat[19+ sensor * len(fields_name)])]]))
         publishers[sensor].publish(np.asarray(vis_mat[sensor], dtype=np.float32).flatten('F'))
     for sensor in range(0, 3):
         aux=np.array(vis_mat[sensor],dtype=np.uint8)
