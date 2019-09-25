@@ -85,20 +85,21 @@ def callback_biotac(data,publishers):
             mat[i] = np.abs(int(mat[i])-int(prev_mat[i - 1]))
     for sensor in range(0, 3):
         pac=0
-        for i in range(2,len(sensor_labels)+1,2):
-            pac+=int(mat[i+ sensor * len(sensor_labels)])
-        pac=int(pac/int(len(sensor_labels)))
-        vis_mat.append(np.asarray([[0,int(mat[sensor_labels["E11"]+ sensor * len(sensor_labels)]),0,0,0,int(mat[sensor_labels["E1"]+ sensor * len(sensor_labels)]),0],
-                            [0,0,int(mat[sensor_labels["E12"]+ sensor * len(sensor_labels)]),0,int(mat[sensor_labels["E2"]+ sensor * len(sensor_labels)]),0,0],
-                            [int(mat[sensor_labels["TAC"]+ sensor * len(sensor_labels)]),0,0,int(mat[sensor_labels["E21"]+ sensor * len(sensor_labels)]),0,0,pac],
-                            [0,0,int(mat[sensor_labels["E23"]+ sensor * len(sensor_labels)]),0, int(mat[sensor_labels["E22"]+ sensor * len(sensor_labels)]),0,0],
-                            [int(mat[sensor_labels["E13"]+ sensor * len(sensor_labels)]),int(mat[sensor_labels["E14"]+ sensor * len(sensor_labels)]),0,int(mat[sensor_labels["E24"]+ sensor * len(sensor_labels)]),0,int(mat[sensor_labels["E4"]+ sensor * len(sensor_labels)]),int(mat[sensor_labels["E3"]+ sensor * len(sensor_labels)])],
-                            [0,0,int(mat[sensor_labels["E15"]+ sensor * len(sensor_labels)]),0,int(mat[sensor_labels["E5"]+ sensor * len(sensor_labels)]),0,0],
-                            [int(mat[sensor_labels["E16"]+ sensor * len(sensor_labels)]),0,0,0,0,0,int(mat[sensor_labels["E6"]+ sensor * len(sensor_labels)])],
-                            [0,int(mat[sensor_labels["E17"]+ sensor * len(sensor_labels)]),0,0,0,int(mat[sensor_labels["E7"]+ sensor * len(sensor_labels)]),0],
-                            [int(mat[sensor_labels["TDC"]+ sensor * len(sensor_labels)]),0,int(mat[sensor_labels["E18"]+ sensor * len(sensor_labels)]),0,int(mat[sensor_labels["E8"]+ sensor * len(sensor_labels)]),0,int(mat[sensor_labels["PDC"]+ sensor * len(sensor_labels)])],
-                            [0,int(mat[sensor_labels["E19"]+ sensor * len(sensor_labels)]),0,0,0,int(mat[sensor_labels["E9"]+ sensor * len(sensor_labels)]),0],
-                            [int(mat[sensor_labels["E20"]+ sensor * len(sensor_labels)]),0,0,0,0,0,int(mat[sensor_labels["E10"]+ sensor * len(sensor_labels)])]]))
+        for i in range(2,len(fields_name)+1,2):
+            pac+=int(mat[i+ sensor * len(fields_name)])
+        pac=int(pac/int(len(fields_name)))
+        vis_mat.append(np.asarray([[0,int(mat[fn["E11"]+ sensor * len(fields_name)]),0,0,0,int(mat[fn["E1"]+ sensor * len(fields_name)]),0],
+                            [0,0,int(mat[fn["E12"]+ sensor * len(fields_name)]),0,int(mat[fn["E2"]+ sensor * len(fields_name)]),0,0],
+                            [int(mat[fn["TAC"]+ sensor * len(fields_name)]),0,0,int(mat[fn["E21"]+ sensor * len(fields_name)]),0,0,pac],
+                            [0,0,int(mat[fn["E23"]+ sensor * len(fields_name)]),0, int(mat[fn["E22"]+ sensor * len(fields_name)]),0,0],
+                            [int(mat[fn["E13"]+ sensor * len(fields_name)]),int(mat[fn["E14"]+ sensor * len(fields_name)]),0,int(mat[fn["E24"]+ sensor * len(fields_name)]),0,int(mat[fn["E4"]+ sensor * len(fields_name)]),int(mat[fn["E3"]+ sensor * len(fields_name)])],
+                            [0,0,int(mat[fn["E15"]+ sensor * len(fields_name)]),0,int(mat[fn["E5"]+ sensor * len(fields_name)]),0,0],
+                            [int(mat[fn["E16"]+ sensor * len(fields_name)]),0,0,0,0,0,int(mat[fn["E6"]+ sensor * len(fields_name)])],
+                            [0,int(mat[fn["E17"]+ sensor * len(fields_name)]),0,0,0,int(mat[fn["E7"]+ sensor * len(fields_name)]),0],
+                            [int(mat[fn["TDC"]+ sensor * len(fields_name)]),0,int(mat[fn["E18"]+ sensor * len(fields_name)]),0,int(mat[fn["E8"]+ sensor * len(fields_name)]),0,int(mat[fn["PDC"]+ sensor * len(fields_name)])],
+                            [0,int(mat[fn["E19"]+ sensor * len(fields_name)]),0,0,0,int(mat[fn["E9"]+ sensor * len(fields_name)]),0],
+                            [int(mat[fn["E20"]+ sensor * len(fields_name)]),0,0,0,0,0,int(mat[fn["E10"]+ sensor * len(fields_name)])]]))
+
         publishers[sensor].publish(np.asarray(vis_mat[sensor], dtype=np.float32).flatten('F'))
     for sensor in range(0, 3):
         aux=np.array(vis_mat[sensor],dtype=np.uint8)
@@ -124,6 +125,7 @@ def listener():
             pub0 = rospy.Publisher('sensors/biotac/0', numpy_msg(Floats),queue_size=10)
             pub1 = rospy.Publisher('sensors/biotac/1', numpy_msg(Floats),queue_size=10)
             pub2 = rospy.Publisher('sensors/biotac/2', numpy_msg(Floats),queue_size=10)
+
             rospy.Subscriber("/biotac_sp_ros", String, callback_biotac, ([pub0, pub1, pub2]))
             print("Sensor 0 published in topic: /sensors/biotac/0.")
             print("Sensor 1 published in topic: /sensors/biotac/1.")
