@@ -35,7 +35,7 @@ __file_name__ = 'visualiseBiotac.py'
 __description__ = 'Subscribe the Biotac sensors raw data and display the data per sensor'
 __compatibility__ = "Python 2 and Python 3"
 __platforms__ = "i386, x86_64, arm32 and arm64"
-__diff__= "GPLv3 , new lauch file and publication in 3 topics"
+__diff__= "GPLv3 , new launch file and publication in 3 topics"
 
 #===============================================================================
 # IMPORT STATEMENTS
@@ -65,13 +65,9 @@ def callback_biotac(data,publishers):
     mat = np.asarray(buffer)
 
     mat = np.asarray(mat)
-    fields_name = ["E1", "PAC", "E2", "PAC", "E3", "PAC", "E4", "PAC", "E5", "PAC", "E6", "PAC", "E7", "PAC", "E8", \
-                   "PAC", "E9", "PAC", "E10", "PAC", "E11", "PAC", "E12", "PAC", "E13", "PAC", "E14", "PAC", "E15", \
-                   "PAC", "E16", "PAC", "E17", "PAC", "E18", "PAC", "E19", "PAC", "E20", "PAC", "E21", "PAC", "E22", \
-                   "PAC", "E23", "PAC", "E24", "PAC", "PDC", "PAC", "TAC", "PAC", "TDC", "PAC"]
 
     # Dictionary to adress the respective sensors
-    fn = {
+    sensor_labels = {
         "E1": 1, "PAC": 2, "E2": 3, "E3": 5, "E4": 7, "E5": 9, "E6": 11, "E7": 13, "E8": 15, \
         "E9": 17, "E10": 19, "E11": 21, "E12": 23, "E13": 25, "E14": 27, "E15": 29, \
         "E16": 31, "E17": 33, "E18": 35, "E19": 37, "E20": 39, "E21": 41, "E22": 43, \
@@ -152,7 +148,4 @@ if __name__ == '__main__':
     print("[Initialising biotac visualisation...]\n")
     rospy.init_node('visualise_biotac', anonymous=True)
     fsr=0
-    # if not flag:
-    #     main()
-    #     flag = True
     listener()
