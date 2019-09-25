@@ -129,8 +129,7 @@ def listener():
             pub0 = rospy.Publisher('sensors/biotac/0', numpy_msg(Floats),queue_size=10)
             pub1 = rospy.Publisher('sensors/biotac/1', numpy_msg(Floats),queue_size=10)
             pub2 = rospy.Publisher('sensors/biotac/2', numpy_msg(Floats),queue_size=10)
-            # Calls callback_biotec each time a new message on the topic arrives
-            # Hands over the publishers (pub0,pub1,pub2) of this script to the callback function as well
+
             rospy.Subscriber("/biotac_sp_ros", String, callback_biotac, ([pub0, pub1, pub2]))
             print("Sensor 0 published in topic: /sensors/biotac/0.")
             print("Sensor 1 published in topic: /sensors/biotac/1.")
