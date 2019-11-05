@@ -93,9 +93,16 @@ s03 - sensor 3
 
 With exception of the time, each of the values is the average of the individual values of the 4x frames collected during 1 sec.
 
+# Howto cite?
+Please cite as: 
+Machado, Pedro, & McGinnity, T.M. (2019, November 5). BioTac SP ROS stack (Version 1.0.0). Zenodo. http://doi.org/10.5281/zenodo.3529376
+
+DOI: ![](https://github.com/CNCR-NTU/biotac_sp_ros/blob/master/doc/zenodo.3529376.svg)
+
 # Contacts
 Computational Neurosciences and Cognitive Robotics Group at the Nottingham Trent University.
 
 Pedro Machado <pedro.baptistamachado@ntu.ac.uk>
 
 Martin McGinnity <martin.mcginnity@ntu.ac.uk>
+
