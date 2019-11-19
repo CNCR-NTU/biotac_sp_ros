@@ -47,7 +47,7 @@ import cv2
 import os
 from rospy_tutorials.msg import Floats
 from rospy.numpy_msg import numpy_msg
-import fingertips_config as fc
+import sawyer_grasping_project.fingertipsConfig as fc
 
 #===============================================================================
 # GLOBAL VARIABLES DECLARATIONS
@@ -56,7 +56,7 @@ PATH=os.path.dirname(os.path.realpath(__file__))
 P=0.98
 visualisationFlag = True# False #
 global fsr
-FINGERTIPS=fc.FINGERTIPS
+FINGERTIPS=["Thumb","Index","Ring"]
 #===============================================================================
 # METHODS
 #===============================================================================

@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(biotac_sp_ros)
 
+catkin_python_setup()
+
 ## Find catkin and any catkin packages
 find_package(catkin REQUIRED COMPONENTS roscpp cheetah_lib std_msgs genmsg)
 
