@@ -47,7 +47,6 @@ import cv2
 import os
 from rospy_tutorials.msg import Floats
 from rospy.numpy_msg import numpy_msg
-import sawyer_grasping_project.fingertipsConfig as fc
 
 #===============================================================================
 # GLOBAL VARIABLES DECLARATIONS
