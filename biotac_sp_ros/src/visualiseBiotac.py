@@ -47,6 +47,7 @@ import cv2
 import os
 from rospy_tutorials.msg import Floats
 from rospy.numpy_msg import numpy_msg
+import fingertips_config as fc
 
 #===============================================================================
 # GLOBAL VARIABLES DECLARATIONS
@@ -55,6 +56,7 @@ PATH=os.path.dirname(os.path.realpath(__file__))
 P=0.98
 visualisationFlag = True# False #
 global fsr
+FINGERTIPS=fc.FINGERTIPS
 #===============================================================================
 # METHODS
 #===============================================================================
@@ -105,7 +107,7 @@ def callback_biotac(data,publishers):
             # resize image
             aux = cv2.resize(aux, dim, interpolation=cv2.INTER_AREA)
             im_color = (cv2.applyColorMap(aux, cv2.COLORMAP_HOT))
-            cv2.imshow("Sensor " + str(sensor), im_color)
+            cv2.imshow(FINGERTIPS[sensor], im_color)
 
     if visualisationFlag and cv2.waitKey(1) & 0xFF == ord('q'):
         rospy.signal_shutdown('Quit')
