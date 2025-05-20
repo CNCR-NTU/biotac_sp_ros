@@ -40,7 +40,7 @@
 
 extern "C"{
     #include <biotac_sp_ros/cheetah.h>
-    
+
 }
 extern "C"{
     #include <biotac_sp_ros/biotac.h>
@@ -60,12 +60,12 @@ int main(int argc,char **argv)
 	bt_data *data;
 	BioTac bt_err_code;
 	Cheetah ch_handle;
-    
+
     ros::init(argc, argv,"biotac_sp_ros");
     ros::NodeHandle n;
     ros::Rate loop_rate(100);
     ros::Publisher biotac_sp_pub = n.advertise<std_msgs::String>("biotac_sp_ros", 1000);
-    
+
 	int i;
 	int length_of_data_in_second;
 	int number_of_samples;
@@ -127,11 +127,11 @@ int main(int argc,char **argv)
 	{
 		std::cout<<"\nBioTac(s) detected:"<< biotac.number_of_biotacs<<".\n\n";
 	}
-	static int results[4][162]; 
+	static int results[4][162];
     static int results_vec[162];
     std::cout<<"Biotac sp ROS service running... Press <ctrl> <c> to stop.\nResults are being published in topic /biotac_sp_ros.\n";
     loop_rate.sleep();
-    
+
     while (ros::ok())
     {
         std::stringstream s_results;
@@ -161,7 +161,7 @@ int main(int argc,char **argv)
         /**********************************************************/
         number_of_loops=1;
         //std::cout<<"Start collecting BioTac...\n";
-        
+
         memset(results, 0, sizeof results);
 
         for (i = 0; i < number_of_loops; i++)
@@ -183,7 +183,7 @@ int main(int argc,char **argv)
         s_results<<ros::Time::now();
         for (int l=0; l<162;++l)
         {
-                s_results<<","<<results_vec[l];   
+                s_results<<","<<results_vec[l];
         }
 
         free(data);
