@@ -47,15 +47,28 @@ $ ./installCheetahDriver.sh
 ```
 
 ## Step 5: compile and install
+
+### ROS only
 ```
 $ cd ~/catkin_ws
 $ catkin_make
 $ source devel/setup.sh
 ```
+### ROS2 only
+```
+$ cd ~/ros2-ws
+$ colcon build --packages-select biotac_sp_ros
+$ source devel/setup.sh
+```
 
 ## Step 6: run
 
+### ROS only
 `$ roslaunch biotac_sp_ros biotac.launch`
+
+
+### ROS2 only
+`$ ros2 launch biotac_sp_ros2 biotac_launch.py`
 
 
 # Understanding the data
@@ -103,6 +116,4 @@ DOI: ![](https://github.com/CNCR-NTU/biotac_sp_ros/blob/master/doc/zenodo.352937
 Computational Neurosciences and Cognitive Robotics Group at the Nottingham Trent University.
 
 Pedro Machado <pedro.baptistamachado@ntu.ac.uk>
-
-Martin McGinnity <martin.mcginnity@ntu.ac.uk>
 
