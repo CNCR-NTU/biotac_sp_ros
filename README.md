@@ -16,8 +16,12 @@ This repository is for hosting the Biotac SP sensors software released under the
 * Host pc
 
 ## Software
+### ROS
 * Ubuntu Linux 18.04 LTS
 * ROS Melodic [installed](http://wiki.ros.org/melodic/Installation/Ubuntu) and [configured](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment)
+### ROS 2
+* Ubuntu 24.04 LTS
+* ROS 2 Jazzy [installed](https://docs.ros.org/en/jazzy/Installation.html)
 
 # Installation procedure:
 ## Step 1: Connect the equipment 
@@ -35,11 +39,14 @@ $ sudo apt install build-essential git terminator
 ```
 
 ## Step 3: clone the repository
+### ROS
 ```
 $ cd ~/catkin_ws/src
 $ git clone https://github.com/CNCR-NTU/biotac_sp_ros.git
 ```
-
+### ROS 2
+$ cd ~/ros2-ws/src
+$ git clone https://github.com/CNCR-NTU/biotac_sp_ros.git
 ## Step 4: install the drivers
 ```
 $ cd biotac_sp_ros
