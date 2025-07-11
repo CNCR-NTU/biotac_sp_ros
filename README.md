@@ -21,7 +21,7 @@ This repository is for hosting the Biotac SP sensors software released under the
 * ROS Melodic [installed](http://wiki.ros.org/melodic/Installation/Ubuntu) and [configured](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment)
 ### ROS 2
 * Ubuntu 24.04 LTS
-* ROS 2 Jazzy [installed](https://docs.ros.org/en/jazzy/Installation.html)
+* ROS 2 Jazzy [installed](https://docs.ros.org/en/jazzy/Installation.html) and [configured](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Configuring-ROS2-Environment.html)
 
 # Installation procedure:
 ## Step 1: Connect the equipment 
